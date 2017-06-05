@@ -6,8 +6,8 @@ android:
     - tools # to get the new `repository-11.xml`
     - tools # see https://github.com/travis-ci/travis-ci/issues/6040#issuecomment-219367943)
     - platform-tools
-    - build-tools-26.0.0 rc2
-    - android-O
+    - build-tools-26.0.0-rc2
+    - android-25
     - extra-android-m2repository
     - extra-google-m2repository
     - extra-android-support
@@ -21,8 +21,17 @@ licenses:
     - 'android-sdk-license-.+'
     - 'google-gdk-license-.+'
 
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+
+cache:
+  directories:
+    - $HOME/.gradle
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
 script:
-  - ./gradlew build connectedAndroidTest
+  - ./gradlew build connectedCheck
 
 jdk:
   - oraclejdk8  # lamba expression support
