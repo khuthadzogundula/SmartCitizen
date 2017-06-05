@@ -22,16 +22,16 @@ licenses:
     - 'google-gdk-license-.+'
 
 before_cache:
-  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
-
+  - "rm -f $HOME/.gradle/caches/modules-2/modules-2.lock"
+before_install:
+  - "chmod +x gradlew"
 cache:
   directories:
-    - $HOME/.gradle
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
 script:
-  - ./gradlew build connectedCheck
+  - ./gradlew build connectedCheck --stacktrace
 
 jdk:
   - oraclejdk8  # lamba expression support
