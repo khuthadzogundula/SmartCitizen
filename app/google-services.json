@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "836248094153",
+    "firebase_url": "https://smartcitizens-android.firebaseio.com",
+    "project_id": "smartcitizens-android",
+    "storage_bucket": "smartcitizens-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:836248094153:android:abb4f942b28bb9aa",
+        "android_client_info": {
+          "package_name": "za.co.gundula.app.smartcitizen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "836248094153-d48gl6qfhqr337rjcdgu39g2droukk8u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "za.co.gundula.app.smartcitizen",
+            "certificate_hash": "500d194d68869639247965f3180a133251dede31"
+          }
+        },
+        {
+          "client_id": "836248094153-v5f9aouv8cero6jo7ghd8bqdf1rgmrvn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTvRBUnfzjeN8ojXxJ4IadFKnLiwSlzH0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "836248094153-v5f9aouv8cero6jo7ghd8bqdf1rgmrvn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
