@@ -78,6 +78,10 @@ public class LoginActivity extends BaseActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     //mAuthProgressDialog.dismiss();
+                    String user_uid = user.getUid();
+                    Log.i(LOG_TAG, user_uid);
+                    mSharedPrefEditor.putString(BaseActivity.USER_UUID, user_uid).apply();
+
                     showOnBoarding();
                 }
             }
@@ -203,15 +207,15 @@ public class LoginActivity extends BaseActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Timber.d(LOG_TAG, acct.toString());
+                            Log.i(LOG_TAG, acct.toString());
                             String unprocessedEmail = acct.getEmail();
                             String user_uid = acct.getId();
                             String user_name = acct.getDisplayName();
                             String fullname = acct.getGivenName()+" "+acct.getFamilyName();
+                            Log.i(LOG_TAG, acct.getIdToken());
 
                             mSharedPrefEditor.putString(BaseActivity.KEY_SIGNUP_EMAIL, unprocessedEmail).apply();
                             mSharedPrefEditor.putString(BaseActivity.KEY_PROVIDER, BaseActivity.GOOGLE_PROVIDER).apply();
-                            mSharedPrefEditor.putString(BaseActivity.PROPERTY_UID, user_uid).apply();
                             mSharedPrefEditor.putString(BaseActivity.PROPERTY_USERNAME, user_name).apply();
                             mSharedPrefEditor.putString(BaseActivity.PROPERTY_FULLNAME, fullname).apply();
 
@@ -221,6 +225,8 @@ public class LoginActivity extends BaseActivity {
                             } else {
                                 mSharedPrefEditor.putString(BaseActivity.PROPERTY_AVATAR, "").apply();
                             }
+
+                            mSharedPrefEditor.commit();
 
                             showOnBoarding();
                         } else {

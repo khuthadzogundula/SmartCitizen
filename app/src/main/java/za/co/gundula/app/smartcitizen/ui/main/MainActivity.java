@@ -26,10 +26,10 @@ import com.google.android.gms.common.ConnectionResult;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import za.co.gundula.app.smartcitizen.R;
 import za.co.gundula.app.smartcitizen.ui.base.BaseActivity;
 import za.co.gundula.app.smartcitizen.ui.user.ProfileActivity;
+import za.co.gundula.app.smartcitizen.utils.CircleTransform;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -99,7 +99,7 @@ public class MainActivity extends BaseActivity
     public void displayImageAvatar(String url) {
         if (url != null) {
             Glide.with(context).load(url)
-                    .bitmapTransform(new CropCircleTransformation(this))
+                    .bitmapTransform(new CircleTransform(this))
                     .diskCacheStrategy(DiskCacheStrategy.ALL).into(profileImageView);
         }
     }

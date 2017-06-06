@@ -36,6 +36,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
     public static final String GOOGLE_PROVIDER = "google";
     public static final String PROPERTY_AVATAR = "property_avatar";
     public static final String PROPERTY_UID = "property_uid";
+    public static final String USER_UUID = "user_uid";
     public static final String PROPERTY_USERNAME = "property_username";
     public static final String PROPERTY_FULLNAME = "property_fullname";
 
