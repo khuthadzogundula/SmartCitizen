@@ -117,7 +117,7 @@ public class ProfileActivityFragment extends LifecycleFragment {
     @OnClick(R.id.profile_update)
     void updateProfile() {
         Toast.makeText(getContext(), uid, Toast.LENGTH_LONG).show();
-        //profileViewModel.addUser(uid);
+        profileViewModel.addUser(uid);
     }
 
     @OnClick(R.id.change_profile_pic)

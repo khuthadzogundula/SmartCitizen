@@ -35,16 +35,13 @@ public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
-    private SharedPreferences mSharedPref;
-    private SharedPreferences.Editor mSharedPrefEditor;
-
     Context context;
+    private SharedPreferences mSharedPref;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.fab) FloatingActionButton floatingActionButton;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.nav_view) NavigationView navigationView;
-    //@BindView(R.id.avatar) ImageView profileImageView;
 
     @NonNull
     ImageView profileImageView;
@@ -61,7 +58,6 @@ public class MainActivity extends BaseActivity
         setSupportActionBar(toolbar);
 
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        mSharedPrefEditor = mSharedPref.edit();
 
         String uid = mSharedPref.getString(BaseActivity.PROPERTY_UID, "");
         String profile_avatar = mSharedPref.getString(BaseActivity.PROPERTY_AVATAR, "");

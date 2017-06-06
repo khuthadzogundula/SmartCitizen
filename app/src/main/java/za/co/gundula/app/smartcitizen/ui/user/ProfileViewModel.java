@@ -106,8 +106,37 @@ public class ProfileViewModel extends ViewModel implements SmartCitizenComponent
 
     public void addUser(String user_id) {
 
-        //initials =
+        initials = getInitialFromName(displayName);
+        String[] first_last_name = getFirstLastName(displayName);
+        if (first_last_name.length > 1) {
+            first_name = first_last_name[0];
+            surname = first_last_name[first_last_name.length - 1];
+        } else if (first_last_name.length == 1) {
+            first_name = first_last_name[0];
+            surname = "";
+        } else {
+            first_name = "";
+            surname = "";
+        }
+
         User user = new User(user_id, emailAddress, displayName, phoneNumber, initials, first_name, surname, date_created);
+
+        /*
+        HashMap<String, Object> userAndUidMapping = new HashMap<String, Object>();
+         User newUser = new User(addressLine1, addressLine2, bio, city, contact, country, Utils.decodeEmail(email), hasLoggedInWithPassword, isAdmin, name, personna, postalCode, province, registered, idNumber, "active", mGender, mDateOfBirth);
+        Map<String, Object> updateUserMap = newUser.toMap();
+
+        userAndUidMapping.put("/" + Constants.FIREBASE_LOCATION_USERS + "/" + email, updateUserMap);
+        userAndUidMapping.put("/" + Constants.FIREBASE_LOCATION_UID_MAPPINGS + "/"
+                + uuid, email);
+
+        mFirebaseRef.updateChildren(userAndUidMapping);
+        mFirebaseRef.child(Constants.FIREBASE_LOCATION_UID_MAPPINGS)
+                .child(uuid).setValue(email);
+        showSnackBar("User updated successfully");
+        */
+
+
         /*userRepository.addUser(user).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
@@ -127,6 +156,26 @@ public class ProfileViewModel extends ViewModel implements SmartCitizenComponent
                     }
                 });
          */
+    }
+
+    public static String getInitialFromName(String name) {
+        StringBuilder builder = new StringBuilder();
+        name = name.trim();
+        String[] splitStringArray = name.split(" ");
+        if (splitStringArray.length > 1) {
+            for (int i = 0; i < splitStringArray.length; i++) {
+                builder.append(splitStringArray[i].substring(0, 1));
+            }
+        } else {
+            return name.substring(0, 1);
+        }
+
+        return builder.toString();
+    }
+
+    public static String[] getFirstLastName(String name) {
+        name = name.trim();
+        return name.split(" ");
     }
 
     @Override

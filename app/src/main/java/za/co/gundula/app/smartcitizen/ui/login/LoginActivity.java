@@ -72,18 +72,13 @@ public class LoginActivity extends BaseActivity {
 
         initializeScreen();
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    //mAuthProgressDialog.dismiss();
-                    String user_uid = user.getUid();
-                    Log.i(LOG_TAG, user_uid);
-                    mSharedPrefEditor.putString(BaseActivity.USER_UUID, user_uid).apply();
-
-                    showOnBoarding();
-                }
+        mAuthListener = firebaseAuth -> {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if (user != null) {
+                String user_uid = user.getUid();
+                Log.i(LOG_TAG, user_uid);
+                mSharedPrefEditor.putString(BaseActivity.USER_UUID, user_uid).apply();
+                showOnBoarding();
             }
         };
 
