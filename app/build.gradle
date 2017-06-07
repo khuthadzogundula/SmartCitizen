@@ -9,7 +9,7 @@ repositories {
 
 android {
     compileSdkVersion 'android-O'
-    buildToolsVersion '26.0.0 rc2'
+    buildToolsVersion '26.0.0-rc2'
     defaultConfig {
         applicationId "za.co.gundula.app.smartcitizen"
         minSdkVersion 21
