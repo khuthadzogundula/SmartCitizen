@@ -142,7 +142,7 @@ public class ProfileViewModel extends ViewModel implements SmartCitizenComponent
 
                     @Override
                     public void onComplete() {
-                        // also save on firebase 
+                        // also save on firebase
                         mDatabase.updateChildren(childUpdates);
                         Timber.d("onComplete - successfully added user");
                     }
