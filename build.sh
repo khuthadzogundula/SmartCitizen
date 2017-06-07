@@ -12,6 +12,6 @@
 #fi
 
 # TODO Those stupid Gradle plugin bugs are really annoying
-./gradlew clean assembleDebug
+./gradlew clean assembleDebug --stacktrace
 
 set +xe
