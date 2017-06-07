@@ -72,13 +72,13 @@
 
                 <EditText
                     android:id="@+id/display_name"
+                    style="@style/Widget.AppCompat.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/account_image"
-                    android:theme="@style/TextAppearance.AppCompat.Medium"
-                    android:textColorHint="@color/accent"
                     android:hint="@string/full_names"
-                   />
+                    android:textColorHint="@color/accent"
+                    android:theme="@style/TextAppearance.AppCompat.Medium" />
 
             </RelativeLayout>
 
@@ -98,16 +98,16 @@
 
                 <EditText
                     android:id="@+id/email_address"
+                    style="@style/Widget.AppCompat.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/email_image"
-                    android:hint="@string/email_address"
-                    android:textColorHint="@color/accent"
-                    android:theme="@style/TextAppearance.AppCompat.Medium"
-                    android:inputType="textEmailAddress"
                     android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@.1234567890"
+                    android:hint="@string/email_address"
+                    android:inputType="textEmailAddress"
+                    android:textColorHint="@color/accent"
 
-                    />
+                    android:theme="@style/TextAppearance.AppCompat.Medium" />
 
             </RelativeLayout>
 
@@ -127,26 +127,25 @@
 
                 <EditText
                     android:id="@+id/phone_number"
+                    style="@style/Widget.AppCompat.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/phone_image"
                     android:hint="@string/contact_number"
-                    android:textColorHint="@color/accent"
-                    android:theme="@style/TextAppearance.AppCompat.Medium"
                     android:inputType="phone"
-                    />
+                    android:textColorHint="@color/accent"
+                    android:theme="@style/TextAppearance.AppCompat.Medium" />
 
             </RelativeLayout>
 
 
-
             <Button
                 android:id="@+id/profile_update"
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_vertical_margin"
                 android:layout_marginEnd="@dimen/activity_vertical_margin"
+                android:layout_marginStart="@dimen/activity_vertical_margin"
+                android:layout_marginTop="10dp"
                 android:background="@color/accent"
                 android:text="@string/profile_update"
                 android:textColor="@android:color/white" />

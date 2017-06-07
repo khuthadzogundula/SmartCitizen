@@ -54,7 +54,6 @@ public class SmartCitizenApplication extends Application {
 
 
         } else {
-            //TODO Install a Crashlytics tree in production
             Fabric.with(this, new Crashlytics());
         }
 

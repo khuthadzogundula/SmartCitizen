@@ -4,7 +4,11 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import com.google.firebase.database.Exclude;
+
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import static za.co.gundula.app.smartcitizen.entity.User.TABLE_NAME;
 
@@ -17,13 +21,12 @@ public class User {
 
     public static final String TABLE_NAME = "user";
     public static final String USER_CREATED_DATE = "date_created";
-    public static final String USER_UPDATED_DATE = "date_updated";
     public static final String USER_ID = "user_id";
     public static final String USER_EMAIL = "user_email";
 
 
     @PrimaryKey @ColumnInfo(name = USER_ID)
-    private int user_id;
+    private String user_id;
     @ColumnInfo(name = USER_EMAIL)
     private String user_email;
     private String username;
@@ -33,14 +36,23 @@ public class User {
     private String user_surname;
     @ColumnInfo(name = USER_CREATED_DATE)
     private String date_created;
-    @ColumnInfo(name = USER_UPDATED_DATE)
-    private String date_updated;
 
-    public int getUser_id() {
+    public User(String user_id, String user_email, String username, String contact_tel, String user_initials, String user_first_name, String user_surname, String date_created) {
+        this.user_id = user_id;
+        this.user_email = user_email;
+        this.username = username;
+        this.contact_tel = contact_tel;
+        this.user_initials = user_initials;
+        this.user_first_name = user_first_name;
+        this.user_surname = user_surname;
+        this.date_created = date_created;
+    }
+
+    public String getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(int user_id) {
+    public void setUser_id(String user_id) {
         this.user_id = user_id;
     }
 
@@ -100,11 +112,33 @@ public class User {
         this.date_created = date_created;
     }
 
-    public String getDate_updated() {
-        return date_updated;
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("user_id", user_id);
+        result.put("user_email", user_email);
+        result.put("username", username);
+        result.put("contact_tel", contact_tel);
+        result.put("user_initials", user_initials);
+        result.put("user_first_name", user_first_name);
+        result.put("user_surname", user_surname);
+        result.put("date_created", date_created);
+
+        return result;
     }
 
-    public void setDate_updated(String date_updated) {
-        this.date_updated = date_updated;
+    @Override
+    public String toString() {
+        return "User{" +
+                "user_id='" + user_id + '\'' +
+                ", user_email='" + user_email + '\'' +
+                ", username='" + username + '\'' +
+                ", contact_tel='" + contact_tel + '\'' +
+                ", user_initials='" + user_initials + '\'' +
+                ", user_first_name='" + user_first_name + '\'' +
+                ", user_surname='" + user_surname + '\'' +
+                ", date_created='" + date_created + '\'' +
+                '}';
     }
+
 }

@@ -72,14 +72,15 @@ public class LoginActivity extends BaseActivity {
 
         initializeScreen();
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    //mAuthProgressDialog.dismiss();
-                    showOnBoarding();
-                }
+        mAuthListener = firebaseAuth -> {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if (user != null) {
+                String user_uid = user.getUid();
+                String email_address = user.getEmail();
+                Log.i(LOG_TAG, user_uid);
+                mSharedPrefEditor.putString(BaseActivity.USER_UUID, user_uid).apply();
+                mSharedPrefEditor.putString(BaseActivity.USER_EMAIL, email_address).apply();
+                showOnBoarding();
             }
         };
 
@@ -203,7 +204,6 @@ public class LoginActivity extends BaseActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Timber.d(LOG_TAG, acct.toString());
                             String unprocessedEmail = acct.getEmail();
                             String user_uid = acct.getId();
                             String user_name = acct.getDisplayName();
@@ -211,7 +211,6 @@ public class LoginActivity extends BaseActivity {
 
                             mSharedPrefEditor.putString(BaseActivity.KEY_SIGNUP_EMAIL, unprocessedEmail).apply();
                             mSharedPrefEditor.putString(BaseActivity.KEY_PROVIDER, BaseActivity.GOOGLE_PROVIDER).apply();
-                            mSharedPrefEditor.putString(BaseActivity.PROPERTY_UID, user_uid).apply();
                             mSharedPrefEditor.putString(BaseActivity.PROPERTY_USERNAME, user_name).apply();
                             mSharedPrefEditor.putString(BaseActivity.PROPERTY_FULLNAME, fullname).apply();
 
@@ -221,6 +220,8 @@ public class LoginActivity extends BaseActivity {
                             } else {
                                 mSharedPrefEditor.putString(BaseActivity.PROPERTY_AVATAR, "").apply();
                             }
+
+                            mSharedPrefEditor.commit();
 
                             showOnBoarding();
                         } else {
