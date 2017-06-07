@@ -8,7 +8,7 @@ repositories {
 
 android {
     compileSdkVersion 'android-O'
-    buildToolsVersion '26.0.0-rc2'
+    buildToolsVersion '26.0.0 rc2'
     defaultConfig {
         applicationId "za.co.gundula.app.smartcitizen"
         minSdkVersion 21
@@ -41,36 +41,36 @@ ext {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile "com.android.support:appcompat-v7:${supportLib}"
-    compile "com.android.support:design:${supportLib}"
-    compile "com.android.support:support-v4:${supportLib}"
-    compile "com.android.support:support-v13:${supportLib}"
-    compile "com.android.support:support-annotations:${supportLib}"
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'io.reactivex.rxjava2:rxjava:2.0.8'
+    implementation "com.android.support:appcompat-v7:${supportLib}"
+    implementation "com.android.support:design:${supportLib}"
+    implementation "com.android.support:support-v4:${supportLib}"
+    implementation "com.android.support:support-v13:${supportLib}"
+    implementation "com.android.support:support-annotations:${supportLib}"
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.0.8'
 
     // Arch
-    compile "android.arch.lifecycle:runtime:${arch_version}"
-    compile "android.arch.lifecycle:extensions:${arch_version}"
-    compile "android.arch.persistence.room:runtime:${arch_version}"
-    compile 'com.jakewharton.threetenabp:threetenabp:1.0.5'
-    testCompile 'junit:junit:4.12'
-    compile "com.android.support.constraint:constraint-layout:${constraint}"
+    implementation "android.arch.lifecycle:runtime:${arch_version}"
+    implementation "android.arch.lifecycle:extensions:${arch_version}"
+    implementation "android.arch.persistence.room:runtime:${arch_version}"
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.0.5'
+    testImplementation 'junit:junit:4.12'
+    implementation "com.android.support.constraint:constraint-layout:${constraint}"
 
     // Play Services and Firebase
-    compile "com.google.firebase:firebase-core:${playServices}"
-    compile "com.google.firebase:firebase-database:${playServices}"
-    compile "com.google.firebase:firebase-auth:${playServices}"
-    compile "com.google.android.gms:play-services-auth:${playServices}"
-    compile "com.google.firebase:firebase-crash:${playServices}"
+    implementation "com.google.firebase:firebase-core:${playServices}"
+    implementation "com.google.firebase:firebase-database:${playServices}"
+    implementation "com.google.firebase:firebase-auth:${playServices}"
+    implementation "com.google.android.gms:play-services-auth:${playServices}"
+    implementation "com.google.firebase:firebase-crash:${playServices}"
 
     // Logging
-    compile 'com.jakewharton.timber:timber:4.5.1'
-    compile "com.google.dagger:dagger:${dagger_version}"
+    implementation 'com.jakewharton.timber:timber:4.5.1'
+    implementation "com.google.dagger:dagger:${dagger_version}"
 
     //Dagger and Arch annotations
     annotationProcessor "com.google.dagger:dagger-compiler:${dagger_version}"
@@ -78,14 +78,14 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:${arch_version}"
 
     // ButterKnife
-    compile 'com.jakewharton:butterknife:8.6.0'
+    implementation 'com.jakewharton:butterknife:8.6.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
-    provided 'javax.annotation:jsr250-api:1.0'
+    compileOnly 'javax.annotation:jsr250-api:1.0'
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
 
     //Image Loading
-    compile 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
 }
 apply plugin: 'com.google.gms.google-services'
