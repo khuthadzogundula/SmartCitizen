@@ -4,6 +4,12 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import io.reactivex.CompletableObserver;
@@ -34,10 +40,10 @@ public class ProfileViewModel extends ViewModel implements SmartCitizenComponent
     private String surname;
     private String date_created;
 
+    private DatabaseReference mDatabase;
 
     public ProfileViewModel() {
-        //return userRepository;
-        //user_id = mSharedPref.getString(BaseActivity.PROPERTY_UID, "");
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     public String getDisplayName() {
@@ -121,23 +127,12 @@ public class ProfileViewModel extends ViewModel implements SmartCitizenComponent
 
         User user = new User(user_id, emailAddress, displayName, phoneNumber, initials, first_name, surname, date_created);
 
-        /*
-        HashMap<String, Object> userAndUidMapping = new HashMap<String, Object>();
-         User newUser = new User(addressLine1, addressLine2, bio, city, contact, country, Utils.decodeEmail(email), hasLoggedInWithPassword, isAdmin, name, personna, postalCode, province, registered, idNumber, "active", mGender, mDateOfBirth);
-        Map<String, Object> updateUserMap = newUser.toMap();
-
-        userAndUidMapping.put("/" + Constants.FIREBASE_LOCATION_USERS + "/" + email, updateUserMap);
-        userAndUidMapping.put("/" + Constants.FIREBASE_LOCATION_UID_MAPPINGS + "/"
-                + uuid, email);
-
-        mFirebaseRef.updateChildren(userAndUidMapping);
-        mFirebaseRef.child(Constants.FIREBASE_LOCATION_UID_MAPPINGS)
-                .child(uuid).setValue(email);
-        showSnackBar("User updated successfully");
-        */
+        Map<String, Object> updateUserMap = user.toMap();
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/users/" + user_id, updateUserMap);
 
 
-        /*userRepository.addUser(user).observeOn(AndroidSchedulers.mainThread())
+        userRepository.addUser(user).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
@@ -147,6 +142,8 @@ public class ProfileViewModel extends ViewModel implements SmartCitizenComponent
 
                     @Override
                     public void onComplete() {
+                        // also save on firebase 
+                        mDatabase.updateChildren(childUpdates);
                         Timber.d("onComplete - successfully added user");
                     }
 
@@ -155,7 +152,7 @@ public class ProfileViewModel extends ViewModel implements SmartCitizenComponent
                         Timber.d("onError - add:", e);
                     }
                 });
-         */
+
     }
 
     public static String getInitialFromName(String name) {

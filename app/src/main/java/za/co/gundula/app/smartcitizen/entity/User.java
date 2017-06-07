@@ -4,7 +4,11 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import com.google.firebase.database.Exclude;
+
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import static za.co.gundula.app.smartcitizen.entity.User.TABLE_NAME;
 
@@ -106,6 +110,21 @@ public class User {
 
     public void setDate_created(String date_created) {
         this.date_created = date_created;
+    }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("user_id", user_id);
+        result.put("user_email", user_email);
+        result.put("username", username);
+        result.put("contact_tel", contact_tel);
+        result.put("user_initials", user_initials);
+        result.put("user_first_name", user_first_name);
+        result.put("user_surname", user_surname);
+        result.put("date_created", date_created);
+
+        return result;
     }
 
     @Override

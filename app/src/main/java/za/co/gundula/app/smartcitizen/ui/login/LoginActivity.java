@@ -76,8 +76,10 @@ public class LoginActivity extends BaseActivity {
             FirebaseUser user = firebaseAuth.getCurrentUser();
             if (user != null) {
                 String user_uid = user.getUid();
+                String email_address = user.getEmail();
                 Log.i(LOG_TAG, user_uid);
                 mSharedPrefEditor.putString(BaseActivity.USER_UUID, user_uid).apply();
+                mSharedPrefEditor.putString(BaseActivity.USER_EMAIL, email_address).apply();
                 showOnBoarding();
             }
         };
@@ -202,12 +204,10 @@ public class LoginActivity extends BaseActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.i(LOG_TAG, acct.toString());
                             String unprocessedEmail = acct.getEmail();
                             String user_uid = acct.getId();
                             String user_name = acct.getDisplayName();
                             String fullname = acct.getGivenName()+" "+acct.getFamilyName();
-                            Log.i(LOG_TAG, acct.getIdToken());
 
                             mSharedPrefEditor.putString(BaseActivity.KEY_SIGNUP_EMAIL, unprocessedEmail).apply();
                             mSharedPrefEditor.putString(BaseActivity.KEY_PROVIDER, BaseActivity.GOOGLE_PROVIDER).apply();

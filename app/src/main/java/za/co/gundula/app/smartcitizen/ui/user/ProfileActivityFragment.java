@@ -5,13 +5,14 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -22,12 +23,18 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import za.co.gundula.app.smartcitizen.R;
 import za.co.gundula.app.smartcitizen.SmartCitizenApplication;
+import za.co.gundula.app.smartcitizen.entity.User;
 import za.co.gundula.app.smartcitizen.injection.SmartCitizenFactory;
 import za.co.gundula.app.smartcitizen.ui.base.BaseActivity;
 import za.co.gundula.app.smartcitizen.utils.CircleTransform;
@@ -56,8 +63,9 @@ public class ProfileActivityFragment extends LifecycleFragment {
     private SharedPreferences mSharedPref;
     private SharedPreferences.Editor mSharedPrefEditor;
 
+    private DatabaseReference mDatabase;
 
-    String uid, profile_avatar;
+    String uid, profile_avatar, email_address;
 
 
     @Override
@@ -68,7 +76,10 @@ public class ProfileActivityFragment extends LifecycleFragment {
         //mSharedPrefEditor = mSharedPref.edit();
 
         uid = mSharedPref.getString(BaseActivity.USER_UUID, "");
+        email_address = mSharedPref.getString(BaseActivity.USER_EMAIL, "");
         profile_avatar = mSharedPref.getString(BaseActivity.PROPERTY_AVATAR, "");
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
     }
 
     @Override
@@ -77,6 +88,7 @@ public class ProfileActivityFragment extends LifecycleFragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, view);
         setupViewModel();
+        setupEventListeners();
         return view;
     }
 
@@ -84,6 +96,28 @@ public class ProfileActivityFragment extends LifecycleFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         loadProfilePicture(profile_avatar);
+        editTextEmailAddress.setText(email_address);
+        mDatabase.child("users").child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null) {
+                    Log.i("Ygritte", dataSnapshot.getValue().toString());
+
+                    /*
+                    User user = dataSnapshot.getValue(User.class);
+                    Log.i("Ygritte", user.getUser_email());
+                    Log.i("Ygritte", user.getContact_tel());
+                    editTextDisplayName.setText(user.getUsername());
+                    editTextPhoneNumber.setText(user.getContact_tel());
+                    */
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void loadProfilePicture(String pic_url) {
@@ -105,6 +139,62 @@ public class ProfileActivityFragment extends LifecycleFragment {
 
     }
 
+    private void setupEventListeners() {
+
+        editTextDisplayName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                profileViewModel.setDisplayName(s.toString());
+            }
+        });
+
+        editTextEmailAddress.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                profileViewModel.setEmailAddress(s.toString());
+            }
+        });
+
+        editTextPhoneNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                profileViewModel.setPhoneNumber(s.toString());
+            }
+        });
+
+
+    }
+
     private void setupViewModel() {
 
         SmartCitizenApplication smartCitizenApplication = (SmartCitizenApplication) getActivity().getApplication();
@@ -117,7 +207,27 @@ public class ProfileActivityFragment extends LifecycleFragment {
     @OnClick(R.id.profile_update)
     void updateProfile() {
         Toast.makeText(getContext(), uid, Toast.LENGTH_LONG).show();
-        profileViewModel.addUser(uid);
+        boolean update_user = true;
+
+        if (TextUtils.isEmpty(editTextDisplayName.getText().toString().trim())) { // Check for a valid email address.
+            editTextDisplayName.setError(getString(R.string.full_name));
+            update_user = false;
+        } else if (TextUtils.isEmpty(editTextEmailAddress.getText().toString().trim())) { // Check for a valid email address.
+            editTextEmailAddress.setError(getString(R.string.email_address_required));
+            update_user = false;
+        } else if (!isEmailValid(editTextEmailAddress.getText().toString().trim())) {
+            editTextEmailAddress.setError(String.format(getString(R.string.error_invalid_email), editTextEmailAddress.getText().toString().trim()));
+            update_user = false;
+        }
+
+        if (update_user) {
+            profileViewModel.addUser(uid);
+        }
+
+    }
+
+    public boolean isEmailValid(String email) {
+        return (email != null && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches());
     }
 
     @OnClick(R.id.change_profile_pic)

@@ -28,4 +28,9 @@
     <string name="contact_number">Contact Number</string>
     <string name="profile_update">profile update</string>
 
+    <!-- Profile -->
+    <string name="full_name">Full name is required!</string>
+    <string name="email_address_required">Email Address is required!</string>
+    <string name="error_invalid_email">%s email address is invalid</string>
+
 </resources>

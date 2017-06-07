@@ -37,6 +37,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
     public static final String PROPERTY_AVATAR = "property_avatar";
     public static final String PROPERTY_UID = "property_uid";
     public static final String USER_UUID = "user_uid";
+    public static final String USER_EMAIL = "user_email";
     public static final String USER_DATE_CREATED = "date_created";
     public static final String PROPERTY_USERNAME = "property_username";
     public static final String PROPERTY_FULLNAME = "property_fullname";

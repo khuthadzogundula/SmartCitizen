@@ -17,6 +17,3 @@ Project_Default.xml
 modules.xml
 misc.xml
 
-app/libs/
-app/src/main/java/za/co/gundula/app/smartcitizen/ui/meter/
-app/src/main/java/za/co/gundula/app/smartcitizen/ui/property/
