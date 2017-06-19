@@ -9,4 +9,10 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
     <color name="grey">#CCCCCC</color>
+
+    <!-- Ahooy OnBoarding Background -->
+    <color name="solid_one">#4abc96</color>
+    <color name="solid_two">#357180</color>
+    <color name="solid_three">#ffce00</color>
+
 </resources>
