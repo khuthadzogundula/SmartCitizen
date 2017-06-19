@@ -100,16 +100,16 @@ public class ProfileActivityFragment extends LifecycleFragment {
         mDatabase.child("users").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot != null) {
-                    Log.i("Ygritte", dataSnapshot.getValue().toString());
+                if (dataSnapshot.getValue() != null) {
+                    Log.i("Ygritte", "" + dataSnapshot.getValue());
 
-                    /*
+
                     User user = dataSnapshot.getValue(User.class);
                     Log.i("Ygritte", user.getUser_email());
                     Log.i("Ygritte", user.getContact_tel());
                     editTextDisplayName.setText(user.getUsername());
                     editTextPhoneNumber.setText(user.getContact_tel());
-                    */
+
                 }
             }
 

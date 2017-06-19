@@ -129,7 +129,6 @@ public class ProfileViewModel extends ViewModel implements SmartCitizenComponent
 
         Map<String, Object> updateUserMap = user.toMap();
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/users/" + user_id, updateUserMap);
 
 
         userRepository.addUser(user).observeOn(AndroidSchedulers.mainThread())
@@ -143,6 +142,9 @@ public class ProfileViewModel extends ViewModel implements SmartCitizenComponent
                     @Override
                     public void onComplete() {
                         // also save on firebase
+                        if (!"".equals(user_id)) {
+                            childUpdates.put("/users/" + user_id, updateUserMap);
+                        }
                         mDatabase.updateChildren(childUpdates);
                         Timber.d("onComplete - successfully added user");
                     }

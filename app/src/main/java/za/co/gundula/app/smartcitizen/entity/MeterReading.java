@@ -2,6 +2,7 @@ package za.co.gundula.app.smartcitizen.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.time.LocalDateTime;
@@ -27,6 +28,11 @@ public class MeterReading {
     private String meter_account_number;
     @ColumnInfo(name = METER_READING_DATE)
     private String date;
+
+
+    @Ignore
+    public MeterReading() {
+    }
 
     public MeterReading(int meter_id, String meter_electricity, String meter_water, String meter_account_number, String date) {
         this.meter_id = meter_id;

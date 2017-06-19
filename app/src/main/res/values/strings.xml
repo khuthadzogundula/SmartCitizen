@@ -32,5 +32,10 @@
     <string name="full_name">Full name is required!</string>
     <string name="email_address_required">Email Address is required!</string>
     <string name="error_invalid_email">%s email address is invalid</string>
+    <string name="hello_there">This was revealed through a couple of emails sent by Gary Naidoo, a Gupta family spokesperson who works at TNA Media, to Atul Gupta in November 2013. The emails are part of a tranche of leaked Gupta emails which have emerged in the last few weeks.
+    Its head Johann van Loggerenberg and former SARS spokesperson Adrian Lackay in their book Rogue pointed at the tobacco industry, who under a project named Honey Badger, they were looking into.
+    \n\n But, the unit was also said at the time to have been investigating more politically sensitive cases, which could also have led to them being targeted.</string>
+    <string name="khuthadzo_gundula">Khuthadzo Gundula</string>
+    <string name="smart_citizen_image">Smart Citizen Image</string>
 
 </resources>

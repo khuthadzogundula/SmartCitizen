@@ -3,12 +3,15 @@ package za.co.gundula.app.smartcitizen.ui.main;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,13 +26,20 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import za.co.gundula.app.smartcitizen.R;
+import za.co.gundula.app.smartcitizen.entity.User;
 import za.co.gundula.app.smartcitizen.ui.base.BaseActivity;
 import za.co.gundula.app.smartcitizen.ui.user.ProfileActivity;
 import za.co.gundula.app.smartcitizen.utils.CircleTransform;
+import za.co.gundula.app.smartcitizen.utils.Constanst;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -37,16 +47,33 @@ public class MainActivity extends BaseActivity
 
     Context context;
     private SharedPreferences mSharedPref;
+    private SharedPreferences.Editor mSharedPrefEditor;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.fab) FloatingActionButton floatingActionButton;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.nav_view) NavigationView navigationView;
+    @BindView(R.id.photoHeader)
+    View photoHeader;
+    @BindView(R.id.mobilenumber)
+    TextView phone_number;
+    @BindView(R.id.full_name)
+    TextView full_name;
+    @BindView(R.id.user_avatar)
+    ImageView user_avatar;
+
+    @BindView(R.id.properties_recycler)
+    RecyclerView properties_recycler;
 
     @NonNull
     ImageView profileImageView;
     @NonNull
     TextView fullnames,profile_email_address;
+
+    DatabaseReference databaseReference;
+    ValueEventListener profileEventListener;
+
+    String profile_fullname, profile_email, uid, profile_avatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +84,14 @@ public class MainActivity extends BaseActivity
 
         setSupportActionBar(toolbar);
 
-        mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        String uid = mSharedPref.getString(BaseActivity.PROPERTY_UID, "");
-        String profile_avatar = mSharedPref.getString(BaseActivity.PROPERTY_AVATAR, "");
-        String profile_fullname = mSharedPref.getString(BaseActivity.PROPERTY_FULLNAME, "");
-        String profile_email = mSharedPref.getString(BaseActivity.KEY_SIGNUP_EMAIL, "");
+        mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        mSharedPrefEditor = mSharedPref.edit();
+
+        uid = mSharedPref.getString(BaseActivity.USER_UUID, "");
+        profile_avatar = mSharedPref.getString(BaseActivity.PROPERTY_AVATAR, "");
+        profile_fullname = mSharedPref.getString(BaseActivity.PROPERTY_FULLNAME, "");
+        profile_email = mSharedPref.getString(BaseActivity.KEY_SIGNUP_EMAIL, "");
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +101,7 @@ public class MainActivity extends BaseActivity
             }
         });
 
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(uid);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -90,6 +120,54 @@ public class MainActivity extends BaseActivity
         if (!"".equals(profile_avatar)) {
             displayImageAvatar(profile_avatar);
         }
+
+        // Min SDK is lollipop
+        /* For devices equal or higher than lollipop set the translation above everything else */
+        photoHeader.setTranslationZ(6);
+        /* Redraw the view to show the translation */
+        photoHeader.invalidate();
+
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        databaseReference.removeEventListener(profileEventListener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        profileEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.getValue() != null) {
+                    User user = dataSnapshot.getValue(User.class);
+                    full_name.setText(user.getUser_email());
+                    phone_number.setText(user.getContact_tel());
+                } else {
+                    full_name.setText(profile_fullname);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        databaseReference.addValueEventListener(profileEventListener);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     public void displayImageAvatar(String url) {
@@ -97,6 +175,10 @@ public class MainActivity extends BaseActivity
             Glide.with(context).load(url)
                     .bitmapTransform(new CircleTransform(this))
                     .diskCacheStrategy(DiskCacheStrategy.ALL).into(profileImageView);
+
+            Glide.with(context).load(url)
+                    .bitmapTransform(new CircleTransform(this))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL).into(user_avatar);
         }
     }
 
@@ -128,6 +210,9 @@ public class MainActivity extends BaseActivity
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_logout) {
+            mSharedPrefEditor.putString(BaseActivity.USER_UUID, "").apply();
+            mSharedPrefEditor.putString(BaseActivity.USER_EMAIL, "").apply();
+
             logout();
         }
 

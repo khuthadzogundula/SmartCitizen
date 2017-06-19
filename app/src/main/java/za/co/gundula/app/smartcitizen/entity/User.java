@@ -2,6 +2,7 @@ package za.co.gundula.app.smartcitizen.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import com.google.firebase.database.Exclude;
@@ -36,6 +37,11 @@ public class User {
     private String user_surname;
     @ColumnInfo(name = USER_CREATED_DATE)
     private String date_created;
+
+
+    @Ignore
+    public User() {
+    }
 
     public User(String user_id, String user_email, String username, String contact_tel, String user_initials, String user_first_name, String user_surname, String date_created) {
         this.user_id = user_id;
