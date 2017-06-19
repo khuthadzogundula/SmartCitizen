@@ -2,6 +2,7 @@ package za.co.gundula.app.smartcitizen.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.time.LocalDateTime;
@@ -33,6 +34,10 @@ public class Property {
     private String property_created;
     @ColumnInfo(name = PROPERTY_UPDATED_DATE)
     private String property_updated;
+
+    @Ignore
+    public Property() {
+    }
 
     public Property(int property_id, String property_account_number, String property_portion, String property_owner, String property_bp, String property_physical_address, String property_created, String property_updated) {
         this.property_id = property_id;

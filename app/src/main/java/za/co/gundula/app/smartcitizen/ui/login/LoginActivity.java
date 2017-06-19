@@ -72,18 +72,22 @@ public class LoginActivity extends BaseActivity {
 
         initializeScreen();
 
-        mAuthListener = firebaseAuth -> {
-            FirebaseUser user = firebaseAuth.getCurrentUser();
+        beforeOnBoarding();
+    }
+
+    public void beforeOnBoarding() {
+        //mAuthListener = firebaseAuth -> {
+        FirebaseUser user = mAuth.getCurrentUser();
             if (user != null) {
                 String user_uid = user.getUid();
                 String email_address = user.getEmail();
-                Log.i(LOG_TAG, user_uid);
+                Log.i(LOG_TAG, "My User ID : " + user_uid);
                 mSharedPrefEditor.putString(BaseActivity.USER_UUID, user_uid).apply();
                 mSharedPrefEditor.putString(BaseActivity.USER_EMAIL, email_address).apply();
+                mSharedPrefEditor.commit();
                 showOnBoarding();
             }
-        };
-
+        //};
     }
 
     public void initializeScreen() {
@@ -107,15 +111,11 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
     }
 
     /**
@@ -124,9 +124,6 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void onPause() {
         super.onPause();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
     }
 
     @Override
@@ -185,8 +182,6 @@ public class LoginActivity extends BaseActivity {
 
     public void showOnBoarding() {
 
-        //On Loading you only need to go to the Main Activity - 16-08-2016 12:53 - Nokwanda
-        //Intent intentMain = new Intent(LoginActivity.this, ConfirmationScreen.class);
         Intent intentMain = new Intent(LoginActivity.this, MainActivity.class);
         intentMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intentMain);
@@ -208,7 +203,6 @@ public class LoginActivity extends BaseActivity {
                             String user_uid = acct.getId();
                             String user_name = acct.getDisplayName();
                             String fullname = acct.getGivenName()+" "+acct.getFamilyName();
-
                             mSharedPrefEditor.putString(BaseActivity.KEY_SIGNUP_EMAIL, unprocessedEmail).apply();
                             mSharedPrefEditor.putString(BaseActivity.KEY_PROVIDER, BaseActivity.GOOGLE_PROVIDER).apply();
                             mSharedPrefEditor.putString(BaseActivity.PROPERTY_USERNAME, user_name).apply();
@@ -222,8 +216,8 @@ public class LoginActivity extends BaseActivity {
                             }
 
                             mSharedPrefEditor.commit();
+                            beforeOnBoarding();
 
-                            showOnBoarding();
                         } else {
                             // If sign in fails, display a message to the user.
                             Timber.d(LOG_TAG, "signInWithCredential:failure", task.getException());
