@@ -145,7 +145,7 @@ public class MainActivity extends BaseActivity
 
                 if (dataSnapshot.getValue() != null) {
                     User user = dataSnapshot.getValue(User.class);
-                    full_name.setText(user.getUser_email());
+                    full_name.setText(user.getUsername());
                     phone_number.setText(user.getContact_tel());
                 } else {
                     full_name.setText(profile_fullname);
