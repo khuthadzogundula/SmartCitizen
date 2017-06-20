@@ -101,15 +101,9 @@ public class ProfileActivityFragment extends LifecycleFragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
-                    Log.i("Ygritte", "" + dataSnapshot.getValue());
-
-
                     User user = dataSnapshot.getValue(User.class);
-                    Log.i("Ygritte", user.getUser_email());
-                    Log.i("Ygritte", user.getContact_tel());
                     editTextDisplayName.setText(user.getUsername());
                     editTextPhoneNumber.setText(user.getContact_tel());
-
                 }
             }
 
@@ -206,9 +200,8 @@ public class ProfileActivityFragment extends LifecycleFragment {
 
     @OnClick(R.id.profile_update)
     void updateProfile() {
-        Toast.makeText(getContext(), uid, Toast.LENGTH_LONG).show();
+        
         boolean update_user = true;
-
         if (TextUtils.isEmpty(editTextDisplayName.getText().toString().trim())) { // Check for a valid email address.
             editTextDisplayName.setError(getString(R.string.full_name));
             update_user = false;

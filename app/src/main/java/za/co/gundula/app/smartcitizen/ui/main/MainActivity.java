@@ -3,7 +3,6 @@ package za.co.gundula.app.smartcitizen.ui.main;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -11,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -39,7 +37,6 @@ import za.co.gundula.app.smartcitizen.entity.User;
 import za.co.gundula.app.smartcitizen.ui.base.BaseActivity;
 import za.co.gundula.app.smartcitizen.ui.user.ProfileActivity;
 import za.co.gundula.app.smartcitizen.utils.CircleTransform;
-import za.co.gundula.app.smartcitizen.utils.Constanst;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -168,6 +165,7 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onStop() {
         super.onStop();
+        databaseReference.removeEventListener(profileEventListener);
     }
 
     public void displayImageAvatar(String url) {
